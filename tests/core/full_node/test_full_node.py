@@ -190,10 +190,10 @@ class TestFullNodeBlockCompression:
         await time_out_assert(30, wallet_is_synced, True, wallet_node_1, full_node_1)
 
         # Send a transaction to mempool
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             tx_size,
             ph,
-        )
+        ))[0]
         await wallet.push_transaction(tx=tr)
         await time_out_assert(
             10,
@@ -223,10 +223,10 @@ class TestFullNodeBlockCompression:
         assert len((await full_node_1.get_all_full_blocks())[-1].transactions_generator_ref_list) == 0
 
         # Send another tx
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             20000,
             ph,
-        )
+        ))[0]
         await wallet.push_transaction(tx=tr)
         await time_out_assert(
             10,
@@ -260,10 +260,10 @@ class TestFullNodeBlockCompression:
         await time_out_assert(30, wallet_is_synced, True, wallet_node_1, full_node_1)
 
         # Send another 2 tx
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             30000,
             ph,
-        )
+        ))[0]
         await wallet.push_transaction(tx=tr)
         await time_out_assert(
             10,
@@ -271,10 +271,10 @@ class TestFullNodeBlockCompression:
             tr.spend_bundle,
             tr.name,
         )
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             40000,
             ph,
-        )
+        ))[0]
         await wallet.push_transaction(tx=tr)
         await time_out_assert(
             10,
@@ -283,10 +283,10 @@ class TestFullNodeBlockCompression:
             tr.name,
         )
 
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             50000,
             ph,
-        )
+        ))[0]
         await wallet.push_transaction(tx=tr)
         await time_out_assert(
             10,
@@ -295,10 +295,10 @@ class TestFullNodeBlockCompression:
             tr.name,
         )
 
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             3000000000000,
             ph,
-        )
+        ))[0]
         await wallet.push_transaction(tx=tr)
         await time_out_assert(
             10,
@@ -324,10 +324,10 @@ class TestFullNodeBlockCompression:
         assert len((await full_node_1.get_all_full_blocks())[-1].transactions_generator_ref_list) > 0
 
         # Creates a standard_transaction and an anyone-can-spend tx
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             30000,
             Program.to(1).get_tree_hash(),
-        )
+        ))[0]
         extra_spend = SpendBundle(
             [
                 CoinSpend(
@@ -370,10 +370,10 @@ class TestFullNodeBlockCompression:
         assert len(all_blocks[-1].transactions_generator_ref_list) == 0
 
         # Make a standard transaction and an anyone-can-spend transaction
-        tr: TransactionRecord = await wallet.generate_signed_transaction(
+        tr: TransactionRecord = (await wallet.generate_signed_transaction(
             30000,
             Program.to(1).get_tree_hash(),
-        )
+        ))[0]
         extra_spend = SpendBundle(
             [
                 CoinSpend(

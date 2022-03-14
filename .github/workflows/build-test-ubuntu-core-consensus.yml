@@ -62,6 +62,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
+    - name: Today's date
+      id: today-date
+      run: date +%F > today.txt
+
     - name: Cache test blocks and plots
       uses: actions/cache@v2.1.6
       id: test-blocks-plots
@@ -69,23 +73,23 @@ jobs:
         path: |
           .chia/blocks
           .chia/test-plots
-        key: test
+        key: ${{ hashFiles('today.txt') }}
 
     - name: Checkout test blocks and plots
       if: steps.test-blocks-plots.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
       with:
         repository: 'Chia-Network/test-cache'
-        path: '.chia_elsewhere'
+        path: '.chia'
         ref: '0.28.0'
         fetch-depth: 1
 
     - name: Link home directory
       run: |
         cd $HOME
-        ln -s $GITHUB_WORKSPACE/.chia_elsewhere
-        echo "$HOME/.chia_elsewhere"
-        ls -al $HOME/.chia_elsewhere
+        ln -s $GITHUB_WORKSPACE/.chia
+        echo "$HOME/.chia"
+        ls -al $HOME/.chia
 
     - name: Install ubuntu dependencies
       run: |

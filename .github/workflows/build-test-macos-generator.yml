@@ -6,7 +6,7 @@ name: MacOS generator Tests
 on:
   push:
     branches:
-      - main
+      - '**'
     tags:
         - '**'
   pull_request:
@@ -62,20 +62,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
-    - name: Checkout test blocks and plots
-      uses: actions/checkout@v2
-      with:
-        repository: 'Chia-Network/test-cache'
-        path: '.chia_elsewhere'
-        ref: '0.28.0'
-        fetch-depth: 1
-
-    - name: Link home directory
-      run: |
-        cd $HOME
-        ln -s $GITHUB_WORKSPACE/.chia_elsewhere
-        echo "$HOME/.chia_elsewhere"
-        ls -al $HOME/.chia_elsewhere
+# Omitted checking out blocks and plots repo Chia-Network/test-cache
 
     - name: Run install script
       env:

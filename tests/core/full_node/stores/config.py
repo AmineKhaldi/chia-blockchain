@@ -1,5 +1,6 @@
 # flake8: noqa: E501
 job_timeout = 40
+checkout_blocks_and_plots = True
 CHECK_RESOURCE_USAGE = """
     - name: Check resource usage
       run: |

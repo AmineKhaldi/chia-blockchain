@@ -6,7 +6,7 @@ name: MacOS blockchain Tests
 on:
   push:
     branches:
-      - main
+      - '**'
     tags:
         - '**'
   pull_request:

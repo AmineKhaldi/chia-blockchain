@@ -6,7 +6,7 @@ name: Ubuntu core-server Test
 on:
   push:
     branches:
-      - main
+      - '**'
     tags:
         - '**'
   pull_request:

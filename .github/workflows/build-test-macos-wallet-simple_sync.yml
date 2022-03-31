@@ -6,7 +6,7 @@ name: MacOS wallet-simple_sync Tests
 on:
   push:
     branches:
-      - main
+      - '**'
     tags:
         - '**'
   pull_request:

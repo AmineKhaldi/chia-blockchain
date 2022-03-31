@@ -6,7 +6,7 @@ name: Ubuntu wallet-rpc Test
 on:
   push:
     branches:
-      - main
+      - '**'
     tags:
         - '**'
   pull_request:

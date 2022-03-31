@@ -6,7 +6,7 @@ name: MacOS core-server Tests
 on:
   push:
     branches:
-      - main
+      - '**'
     tags:
         - '**'
   pull_request:

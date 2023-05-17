@@ -89,12 +89,17 @@ def get_keychain():
 
 class Mode(Enum):
     PLAIN = 0
+    HARD_FORK_2_0 = 1
 
 
-@pytest.fixture(scope="session", params=[Mode.PLAIN])
+@pytest.fixture(scope="session", params=[Mode.HARD_FORK_2_0, Mode.PLAIN])
 def blockchain_constants(request: SubRequest) -> ConsensusConstants:
     if request.param == Mode.PLAIN:
         return test_constants
+    if request.param == Mode.HARD_FORK_2_0:
+        return test_constants.replace(
+            HARD_FORK_HEIGHT=5, PLOT_FILTER_128_HEIGHT=10, PLOT_FILTER_64_HEIGHT=15, PLOT_FILTER_32_HEIGHT=20
+        )
     raise AssertionError("Invalid Blockchain mode in simulation")
 
 

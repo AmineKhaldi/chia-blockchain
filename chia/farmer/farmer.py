@@ -89,6 +89,9 @@ class Farmer:
         # Quality string to plot identifier and challenge_hash, for use with harvester.RequestSignatures
         self.quality_str_to_identifiers: Dict[bytes32, Tuple[str, bytes32, bytes32, bytes32]] = {}
 
+        # Map of challenge chain signage point hash to filter prefix bits
+        self.sp_hash_to_filter_size: Dict[bytes32, uint8] = {}
+
         # number of responses to each signage point
         self.number_of_responses: Dict[bytes32, int] = {}
 
@@ -701,6 +704,7 @@ class Farmer:
                             self.sps.pop(key, None)
                             self.proofs_of_space.pop(key, None)
                             self.quality_str_to_identifiers.pop(key, None)
+                            self.sp_hash_to_filter_size.pop(key, None)
                             self.number_of_responses.pop(key, None)
                             removed_keys.append(key)
                     for key in removed_keys:

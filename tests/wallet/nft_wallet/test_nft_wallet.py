@@ -29,6 +29,7 @@ from chia.wallet.util.wallet_types import WalletType
 from chia.wallet.wallet import CHIP_0002_SIGN_MESSAGE_PREFIX
 from chia.wallet.wallet_node import WalletNode
 from chia.wallet.wallet_state_manager import WalletStateManager
+from tests.conftest import ConsensusMode
 
 
 async def get_nft_count(wallet: NFTWallet) -> int:
@@ -176,12 +177,15 @@ async def test_nft_wallet_creation_automatically(self_hostname: str, two_wallet_
     assert await nft_wallet_1.get_nft_count() == 1
 
 
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.parametrize(
     "trusted",
     [True, False],
 )
 @pytest.mark.asyncio
-async def test_nft_wallet_creation_and_transfer(self_hostname: str, two_wallet_nodes: Any, trusted: Any) -> None:
+async def test_nft_wallet_creation_and_transfer(
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, consensus_mode: ConsensusMode
+) -> None:
     num_blocks = 2
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -1519,12 +1523,12 @@ async def test_nft_bulk_transfer(two_wallet_nodes: Any, trusted: Any) -> None:
     assert coins[2].owner_did is None
 
 
-@pytest.mark.parametrize(
-    "trusted",
-    [True, False],
-)
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
+@pytest.mark.parametrize("trusted", [True, False])
 @pytest.mark.asyncio
-async def test_nft_set_did(self_hostname: str, two_wallet_nodes: Any, trusted: Any) -> None:
+async def test_nft_set_did(
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, consensus_mode: ConsensusMode
+) -> None:
     num_blocks = 3
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]

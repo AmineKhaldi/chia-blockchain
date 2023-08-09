@@ -25,6 +25,7 @@ from chia.wallet.trading.trade_status import TradeStatus
 from chia.wallet.uncurried_puzzle import uncurry_puzzle
 from chia.wallet.util.compute_memos import compute_memos
 from chia.wallet.util.tx_config import DEFAULT_TX_CONFIG
+from tests.conftest import ConsensusMode
 
 # from clvm_tools.binutils import disassemble
 
@@ -50,18 +51,12 @@ async def get_nft_count(wallet: NFTWallet) -> int:
     return await wallet.get_nft_count()
 
 
-@pytest.mark.parametrize(
-    "trusted",
-    [True, False],
-)
-@pytest.mark.parametrize(
-    "zero_royalties",
-    [True, False],
-)
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
+@pytest.mark.parametrize("trusted", [True, False])
+@pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
-# @pytest.mark.skip
 async def test_nft_offer_sell_nft(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -210,18 +205,12 @@ async def test_nft_offer_sell_nft(
     await time_out_assert(20, wallet_taker.get_confirmed_balance, expected_taker_balance)
 
 
-@pytest.mark.parametrize(
-    "trusted",
-    [True, False],
-)
-@pytest.mark.parametrize(
-    "zero_royalties",
-    [True, False],
-)
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
+@pytest.mark.parametrize("trusted", [True, False])
+@pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
-# @pytest.mark.skip
 async def test_nft_offer_request_nft(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -368,18 +357,12 @@ async def test_nft_offer_request_nft(
     await time_out_assert(20, wallet_taker.get_confirmed_balance, expected_taker_balance)
 
 
-@pytest.mark.parametrize(
-    "trusted",
-    [True, False],
-)
-@pytest.mark.parametrize(
-    "zero_royalties",
-    [True, False],
-)
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
+@pytest.mark.parametrize("trusted", [True, False])
+@pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
-# @pytest.mark.skip
 async def test_nft_offer_sell_did_to_did(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -549,18 +532,12 @@ async def test_nft_offer_sell_did_to_did(
     await time_out_assert(20, wallet_taker.get_confirmed_balance, expected_taker_balance)
 
 
-@pytest.mark.parametrize(
-    "trusted",
-    [True, False],
-)
-@pytest.mark.parametrize(
-    "zero_royalties",
-    [True, False],
-)
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
+@pytest.mark.parametrize("trusted", [True, False])
+@pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
-# @pytest.mark.skip
 async def test_nft_offer_sell_nft_for_cat(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -752,12 +729,12 @@ async def test_nft_offer_sell_nft_for_cat(
     await time_out_assert(20, cat_wallet_taker.get_confirmed_balance, expected_taker_cat_balance)
 
 
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.parametrize("trusted", [True, False])
 @pytest.mark.parametrize("test_change", [True, False])
 @pytest.mark.asyncio
-# @pytest.mark.skip
 async def test_nft_offer_request_nft_for_cat(
-    self_hostname: str, two_wallet_nodes: Any, trusted: bool, test_change: bool
+    self_hostname: str, two_wallet_nodes: Any, trusted: bool, test_change: bool, consensus_mode: ConsensusMode
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -1200,10 +1177,8 @@ async def test_nft_offer_sell_cancel_in_batch(self_hostname: str, two_wallet_nod
     await time_out_assert(15, get_trade_and_status, TradeStatus.CANCELLED, trade_manager_maker, trade_make)
 
 
-@pytest.mark.parametrize(
-    "trusted",
-    [True, False],
-)
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
+@pytest.mark.parametrize("trusted", [True, False])
 @pytest.mark.parametrize(
     "royalty_pts",
     [
@@ -1217,7 +1192,11 @@ async def test_nft_offer_sell_cancel_in_batch(self_hostname: str, two_wallet_nod
 @pytest.mark.asyncio
 # @pytest.mark.skip
 async def test_complex_nft_offer(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, royalty_pts: Tuple[int, int, int]
+    self_hostname: str,
+    two_wallet_nodes: Any,
+    trusted: Any,
+    royalty_pts: Tuple[int, int, int],
+    consensus_mode: ConsensusMode,
 ) -> None:
     """
     This test is going to create an offer where the maker offers 1 NFT and 1 CAT for 2 NFTs, an XCH and a CAT

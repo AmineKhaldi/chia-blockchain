@@ -33,6 +33,7 @@ from chia.wallet.util.wallet_types import CoinType
 from chia.wallet.wallet import CHIP_0002_SIGN_MESSAGE_PREFIX
 from chia.wallet.wallet_node import WalletNode, get_wallet_db_path
 from chia.wallet.wallet_state_manager import WalletStateManager
+from tests.conftest import ConsensusMode
 
 
 class TestWalletSimulator:
@@ -186,6 +187,7 @@ class TestWalletSimulator:
         assert await wallet.get_confirmed_balance() == expected_confirmed_balance
         assert await wallet.get_unconfirmed_balance() == expected_confirmed_balance
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize(
         "trusted",
         [True, False],
@@ -196,6 +198,7 @@ class TestWalletSimulator:
         two_wallet_nodes: Tuple[List[FullNodeSimulator], List[Tuple[WalletNode, ChiaServer]], BlockTools],
         trusted: bool,
         self_hostname: str,
+        consensus_mode: ConsensusMode,
     ) -> None:
         num_blocks = 1
         full_nodes, wallets, _ = two_wallet_nodes
@@ -419,6 +422,7 @@ class TestWalletSimulator:
         interested_coins = await wallet_node_2.wallet_state_manager.interested_store.get_interested_coin_ids()
         assert merkle_coin.name() not in set(interested_coins)
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize(
         "trusted",
         [True, False],
@@ -429,6 +433,7 @@ class TestWalletSimulator:
         two_wallet_nodes: Tuple[List[FullNodeSimulator], List[Tuple[WalletNode, ChiaServer]], BlockTools],
         trusted: bool,
         self_hostname: str,
+        consensus_mode: ConsensusMode,
     ) -> None:
         num_blocks = 1
         full_nodes, wallets, _ = two_wallet_nodes
@@ -507,6 +512,7 @@ class TestWalletSimulator:
         assert txs["transactions"][0]["memos"] != txs["transactions"][1]["memos"]
         assert list(txs["transactions"][0]["memos"].values())[0] == b"Test".hex()
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize(
         "trusted",
         [True, False],
@@ -517,6 +523,7 @@ class TestWalletSimulator:
         two_wallet_nodes: Tuple[List[FullNodeSimulator], List[Tuple[WalletNode, ChiaServer]], BlockTools],
         trusted: bool,
         self_hostname: str,
+        consensus_mode: ConsensusMode,
     ) -> None:
         num_blocks = 1
         full_nodes, wallets, _ = two_wallet_nodes
@@ -601,6 +608,7 @@ class TestWalletSimulator:
         assert len(txs["transactions"]) == 1
         assert txs["transactions"][0]["confirmed"]
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize(
         "trusted",
         [True, False],
@@ -611,6 +619,7 @@ class TestWalletSimulator:
         two_wallet_nodes: Tuple[List[FullNodeSimulator], List[Tuple[WalletNode, ChiaServer]], BlockTools],
         trusted: bool,
         self_hostname: str,
+        consensus_mode: ConsensusMode,
     ) -> None:
         num_blocks = 1
         full_nodes, wallets, _ = two_wallet_nodes
@@ -761,6 +770,7 @@ class TestWalletSimulator:
         assert len(resp["coin_records"]) == 1
         assert resp["coin_records"][0]["id"][2:] == merkle_coin.name().hex()
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize(
         "trusted",
         [True, False],
@@ -771,6 +781,7 @@ class TestWalletSimulator:
         two_wallet_nodes: Tuple[List[FullNodeSimulator], List[Tuple[WalletNode, ChiaServer]], BlockTools],
         trusted: bool,
         self_hostname: str,
+        consensus_mode: ConsensusMode,
     ) -> None:
         num_blocks = 1
         full_nodes, wallets, _ = two_wallet_nodes
@@ -959,6 +970,7 @@ class TestWalletSimulator:
         # Check unspent coins
         assert len(await wallet_node_1.wallet_state_manager.coin_store.get_all_unspent_coins()) == 6
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize(
         "trusted",
         [True, False],
@@ -969,6 +981,7 @@ class TestWalletSimulator:
         simulator_and_wallet: Tuple[List[FullNodeSimulator], List[Tuple[WalletNode, ChiaServer]], BlockTools],
         trusted: bool,
         self_hostname: str,
+        consensus_mode: ConsensusMode,
     ) -> None:
         full_nodes, wallets, _ = simulator_and_wallet
         full_node_api = full_nodes[0]
@@ -1000,6 +1013,7 @@ class TestWalletSimulator:
         await full_node_api.wait_for_wallet_synced(wallet_node=wallet_node, timeout=5)
         assert await wallet.get_confirmed_balance() == permanent_funds
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize(
         "trusted",
         [True, False],
@@ -1010,6 +1024,7 @@ class TestWalletSimulator:
         three_sim_two_wallets: Tuple[List[FullNodeSimulator], List[Tuple[WalletNode, ChiaServer]], BlockTools],
         trusted: bool,
         self_hostname: str,
+        consensus_mode: ConsensusMode,
     ) -> None:
         num_blocks = 10
         full_nodes, wallets, _ = three_sim_two_wallets

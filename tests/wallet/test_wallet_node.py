@@ -16,6 +16,7 @@ from chia.util.config import load_config
 from chia.util.ints import uint16, uint32, uint128
 from chia.util.keychain import Keychain, KeyData, generate_mnemonic
 from chia.wallet.wallet_node import Balance, WalletNode
+from tests.conftest import ConsensusMode
 
 
 @pytest.mark.asyncio
@@ -308,9 +309,13 @@ async def test_unique_puzzle_hash_subscriptions(simulator_and_wallet: Simulators
     assert len(set(puzzle_hashes)) == len(puzzle_hashes)
 
 
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.asyncio
 async def test_get_balance(
-    simulator_and_wallet: SimulatorsAndWallets, self_hostname: str, default_400_blocks: List[FullBlock]
+    simulator_and_wallet: SimulatorsAndWallets,
+    self_hostname: str,
+    default_400_blocks: List[FullBlock],
+    consensus_mode: ConsensusMode,
 ) -> None:
     [full_node_api], [(wallet_node, wallet_server)], bt = simulator_and_wallet
     full_node_server = full_node_api.full_node.server

@@ -31,7 +31,7 @@ from chia.wallet.vc_wallet.cr_cat_drivers import ProofsChecker
 from chia.wallet.vc_wallet.cr_cat_wallet import CRCATWallet
 from chia.wallet.vc_wallet.vc_store import VCProofs
 from chia.wallet.wallet_node import WalletNode
-from tests.conftest import SOFTFORK_HEIGHTS
+from tests.conftest import SOFTFORK_HEIGHTS, ConsensusMode
 from tests.wallet.vc_wallet.test_vc_wallet import mint_cr_cat
 
 
@@ -64,6 +64,7 @@ async def claim_pending_approval_balance(
 # We do not test aggregation in a number of cases because it's not correlated with a lot of these parameters.
 # So to avoid the overhead of start up for identical tests, we only change the softfork param for the tests that use it.
 # To pin down the behavior that we intend to eventually deprecate, it only gets one test case.
+@pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "wallets_prefarm_services,trusted,reuse_puzhash,credential_restricted,active_softfork_height",
@@ -84,6 +85,7 @@ async def test_cat_trades(
     reuse_puzhash: bool,
     credential_restricted: bool,
     active_softfork_height: uint32,
+    consensus_mode: ConsensusMode,
 ):
     (
         [wallet_node_maker, initial_maker_balance],
@@ -919,8 +921,9 @@ class TestCATTrades:
 
         await time_out_assert(15, get_trade_and_status, TradeStatus.CANCELLED, trade_manager_maker, trade_make)
 
+    @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.asyncio
-    async def test_trade_conflict(self, three_wallets_prefarm):
+    async def test_trade_conflict(self, three_wallets_prefarm, consensus_mode):
         (
             [wallet_node_maker, maker_funds],
             [wallet_node_taker, taker_funds],

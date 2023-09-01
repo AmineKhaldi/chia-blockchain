@@ -670,7 +670,7 @@ class TestCATWallet:
     @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.parametrize("trusted", [True, False])
     @pytest.mark.asyncio
-    async def test_cat_max_amount_send(self, self_hostname, two_wallet_nodes, trusted, consensus_mode):
+    async def test_cat_max_amount_send(self, self_hostname, two_wallet_nodes, trusted):
         num_blocks = 3
         full_nodes, wallets, _ = two_wallet_nodes
         full_node_api = full_nodes[0]
@@ -783,7 +783,7 @@ class TestCATWallet:
     @pytest.mark.parametrize("trusted", [True, False])
     @pytest.mark.parametrize("autodiscovery", [True, False])
     @pytest.mark.asyncio
-    async def test_cat_hint(self, self_hostname, two_wallet_nodes, trusted, autodiscovery, consensus_mode):
+    async def test_cat_hint(self, self_hostname, two_wallet_nodes, trusted, autodiscovery):
         num_blocks = 3
         full_nodes, wallets, _ = two_wallet_nodes
         full_node_api = full_nodes[0]

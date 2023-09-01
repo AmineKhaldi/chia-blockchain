@@ -41,7 +41,7 @@ def get_parent_branch(value: bytes32, proof: Tuple[int, List[bytes32]]) -> Tuple
 @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.parametrize("trusted", [True, False])
 @pytest.mark.asyncio
-async def test_dl_offers(wallets_prefarm: Any, trusted: bool, consensus_mode: ConsensusMode) -> None:
+async def test_dl_offers(wallets_prefarm: Any, trusted: bool) -> None:
     (
         [wallet_node_maker, maker_funds],
         [wallet_node_taker, taker_funds],
@@ -304,7 +304,7 @@ async def test_dl_offer_cancellation(wallets_prefarm: Any, trusted: bool) -> Non
 @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.parametrize("trusted", [True, False])
 @pytest.mark.asyncio
-async def test_multiple_dl_offers(wallets_prefarm: Any, trusted: bool, consensus_mode: ConsensusMode) -> None:
+async def test_multiple_dl_offers(wallets_prefarm: Any, trusted: bool) -> None:
     (
         [wallet_node_maker, maker_funds],
         [wallet_node_taker, taker_funds],

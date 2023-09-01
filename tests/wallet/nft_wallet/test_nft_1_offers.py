@@ -56,7 +56,7 @@ async def get_nft_count(wallet: NFTWallet) -> int:
 @pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
 async def test_nft_offer_sell_nft(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -210,7 +210,7 @@ async def test_nft_offer_sell_nft(
 @pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
 async def test_nft_offer_request_nft(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -362,7 +362,7 @@ async def test_nft_offer_request_nft(
 @pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
 async def test_nft_offer_sell_did_to_did(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -537,7 +537,7 @@ async def test_nft_offer_sell_did_to_did(
 @pytest.mark.parametrize("zero_royalties", [True, False])
 @pytest.mark.asyncio
 async def test_nft_offer_sell_nft_for_cat(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool, consensus_mode: ConsensusMode
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, zero_royalties: bool
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -734,7 +734,7 @@ async def test_nft_offer_sell_nft_for_cat(
 @pytest.mark.parametrize("test_change", [True, False])
 @pytest.mark.asyncio
 async def test_nft_offer_request_nft_for_cat(
-    self_hostname: str, two_wallet_nodes: Any, trusted: bool, test_change: bool, consensus_mode: ConsensusMode
+    self_hostname: str, two_wallet_nodes: Any, trusted: bool, test_change: bool
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -1190,13 +1190,8 @@ async def test_nft_offer_sell_cancel_in_batch(self_hostname: str, two_wallet_nod
     ],
 )
 @pytest.mark.asyncio
-# @pytest.mark.skip
 async def test_complex_nft_offer(
-    self_hostname: str,
-    two_wallet_nodes: Any,
-    trusted: Any,
-    royalty_pts: Tuple[int, int, int],
-    consensus_mode: ConsensusMode,
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, royalty_pts: Tuple[int, int, int]
 ) -> None:
     """
     This test is going to create an offer where the maker offers 1 NFT and 1 CAT for 2 NFTs, an XCH and a CAT

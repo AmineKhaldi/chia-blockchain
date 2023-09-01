@@ -178,14 +178,9 @@ async def test_nft_wallet_creation_automatically(self_hostname: str, two_wallet_
 
 
 @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
-@pytest.mark.parametrize(
-    "trusted",
-    [True, False],
-)
+@pytest.mark.parametrize("trusted", [True, False])
 @pytest.mark.asyncio
-async def test_nft_wallet_creation_and_transfer(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, consensus_mode: ConsensusMode
-) -> None:
+async def test_nft_wallet_creation_and_transfer(self_hostname: str, two_wallet_nodes: Any, trusted: Any) -> None:
     num_blocks = 2
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]
@@ -1526,9 +1521,7 @@ async def test_nft_bulk_transfer(two_wallet_nodes: Any, trusted: Any) -> None:
 @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.parametrize("trusted", [True, False])
 @pytest.mark.asyncio
-async def test_nft_set_did(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, consensus_mode: ConsensusMode
-) -> None:
+async def test_nft_set_did(self_hostname: str, two_wallet_nodes: Any, trusted: Any) -> None:
     num_blocks = 3
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]

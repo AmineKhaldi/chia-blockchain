@@ -482,7 +482,7 @@ async def test_nft_offer_with_metadata_update(self_hostname: str, two_wallet_nod
 @pytest.mark.parametrize("reuse_puzhash", [True, False])
 @pytest.mark.asyncio
 async def test_nft_offer_nft_for_cat(
-    self_hostname: str, two_wallet_nodes: Any, trusted: Any, reuse_puzhash: bool, consensus_mode: ConsensusMode
+    self_hostname: str, two_wallet_nodes: Any, trusted: Any, reuse_puzhash: bool
 ) -> None:
     full_nodes, wallets, _ = two_wallet_nodes
     full_node_api: FullNodeSimulator = full_nodes[0]

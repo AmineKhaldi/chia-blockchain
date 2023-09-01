@@ -412,11 +412,7 @@ class TestPoolWalletRpc:
     )
     @pytest.mark.asyncio
     async def test_absorb_self(
-        self,
-        one_wallet_node_and_rpc: OneWalletNodeAndRpc,
-        fee: uint64,
-        self_hostname: str,
-        consensus_mode: ConsensusMode,
+        self, one_wallet_node_and_rpc: OneWalletNodeAndRpc, fee: uint64, self_hostname: str
     ) -> None:
         client, wallet_node, full_node_api, total_block_rewards, _ = one_wallet_node_and_rpc
         bt = full_node_api.bt
@@ -498,11 +494,7 @@ class TestPoolWalletRpc:
     )
     @pytest.mark.asyncio
     async def test_absorb_self_multiple_coins(
-        self,
-        one_wallet_node_and_rpc: OneWalletNodeAndRpc,
-        fee: uint64,
-        self_hostname: str,
-        consensus_mode: ConsensusMode,
+        self, one_wallet_node_and_rpc: OneWalletNodeAndRpc, fee: uint64, self_hostname: str
     ) -> None:
         client, wallet_node, full_node_api, total_block_rewards, _ = one_wallet_node_and_rpc
         bt = full_node_api.bt
@@ -575,11 +567,7 @@ class TestPoolWalletRpc:
     )
     @pytest.mark.asyncio
     async def test_absorb_pooling(
-        self,
-        one_wallet_node_and_rpc: OneWalletNodeAndRpc,
-        fee: uint64,
-        self_hostname: str,
-        consensus_mode: ConsensusMode,
+        self, one_wallet_node_and_rpc: OneWalletNodeAndRpc, fee: uint64, self_hostname: str
     ) -> None:
         client, wallet_node, full_node_api, total_block_rewards, _ = one_wallet_node_and_rpc
         bt = full_node_api.bt

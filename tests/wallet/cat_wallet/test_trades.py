@@ -81,11 +81,7 @@ async def claim_pending_approval_balance(
     indirect=["wallets_prefarm_services"],
 )
 async def test_cat_trades(
-    wallets_prefarm_services,
-    reuse_puzhash: bool,
-    credential_restricted: bool,
-    active_softfork_height: uint32,
-    consensus_mode: ConsensusMode,
+    wallets_prefarm_services, reuse_puzhash: bool, credential_restricted: bool, active_softfork_height: uint32
 ):
     (
         [wallet_node_maker, initial_maker_balance],
@@ -923,7 +919,7 @@ class TestCATTrades:
 
     @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
     @pytest.mark.asyncio
-    async def test_trade_conflict(self, three_wallets_prefarm, consensus_mode):
+    async def test_trade_conflict(self, three_wallets_prefarm):
         (
             [wallet_node_maker, maker_funds],
             [wallet_node_taker, taker_funds],

@@ -147,7 +147,7 @@ class TestDLWallet:
     @pytest.mark.parametrize("trusted", [True, False])
     @pytest.mark.asyncio
     async def test_tracking_non_owned(
-        self, self_hostname: str, two_wallet_nodes: SimulatorsAndWallets, trusted: bool, consensus_mode: ConsensusMode
+        self, self_hostname: str, two_wallet_nodes: SimulatorsAndWallets, trusted: bool
     ) -> None:
         full_nodes, wallets, _ = two_wallet_nodes
         full_node_api = full_nodes[0]

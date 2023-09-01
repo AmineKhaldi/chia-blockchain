@@ -312,10 +312,7 @@ async def test_unique_puzzle_hash_subscriptions(simulator_and_wallet: Simulators
 @pytest.mark.limit_consensus_modes(allowed=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0], reason="save time")
 @pytest.mark.asyncio
 async def test_get_balance(
-    simulator_and_wallet: SimulatorsAndWallets,
-    self_hostname: str,
-    default_400_blocks: List[FullBlock],
-    consensus_mode: ConsensusMode,
+    simulator_and_wallet: SimulatorsAndWallets, self_hostname: str, default_400_blocks: List[FullBlock]
 ) -> None:
     [full_node_api], [(wallet_node, wallet_server)], bt = simulator_and_wallet
     full_node_server = full_node_api.full_node.server

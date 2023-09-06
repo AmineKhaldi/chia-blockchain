@@ -3,21 +3,21 @@ repos:
     hooks:
     -   id: check-sql
         name: Validate SQL statements
-        entry: ./activated.py python3 -m tests.check_sql_statements
+        entry: python -m tests.check_sql_statements
         language: system
         pass_filenames: false
 -   repo: local
     hooks:
     -   id: init_py_files
         name: __init__.py files
-        entry: ./activated.py python3 tests/build-init-files.py -v --root .
+        entry: python tests/build-init-files.py -v --root .
         language: system
         pass_filenames: false
 -   repo: local
     hooks:
     -   id: black
         name: black
-        entry: ./activated.py black
+        entry: black
         language: system
         require_serial: true
         types_or: [python, pyi]
@@ -37,41 +37,41 @@ repos:
     hooks:
     -   id: clvm_hex
         name: .clsp.hex files
-        entry: ./activated.py python tools/manage_clvm.py check
+        entry: python tools/manage_clvm.py check
         language: system
         pass_filenames: false
 -   repo: local
     hooks:
     -   id: chialispp
         name: Pretty print chialisp files
-        entry: ./activated.py python tools/chialispp.py .
+        entry: python tools/chialispp.py .
         language: system
         pass_filenames: false
 -   repo: local
     hooks:
     -   id: build mypy.ini
         name: build mypy.ini
-        entry: ./activated.py python manage-mypy.py build-mypy-ini
+        entry: python manage-mypy.py build-mypy-ini
         language: system
         pass_filenames: false
 -   repo: local
     hooks:
     -   id: mypy
         name: mypy
-        entry: ./activated.py mypy
+        entry: mypy
         language: system
         pass_filenames: false
 -   repo: local
     hooks:
     -   id: isort
         name: isort
-        entry: ./activated.py isort
+        entry: isort
         language: system
         types: [python]
 -   repo: local
     hooks:
     -   id: flake8
         name: Flake8
-        entry: ./activated.py flake8
+        entry: flake8
         language: system
         types: [python]

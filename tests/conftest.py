@@ -723,7 +723,7 @@ async def farmer_three_harvester_not_started(
 )
 async def daemon_simulation(consensus_mode, bt, get_b_tools, get_b_tools_1):
     async for _ in setup_full_system_connect_to_deamon(
-        bt.constants,
+        test_constants_modified,
         bt,
         b_tools=get_b_tools,
         b_tools_1=get_b_tools_1,
@@ -752,13 +752,13 @@ async def get_temp_keyring():
 
 
 @pytest_asyncio.fixture(scope="function")
-async def get_b_tools_1(get_temp_keyring, blockchain_constants: ConsensusConstants):
-    return await create_block_tools_async(constants=blockchain_constants, keychain=get_temp_keyring)
+async def get_b_tools_1(get_temp_keyring):
+    return await create_block_tools_async(constants=test_constants_modified, keychain=get_temp_keyring)
 
 
 @pytest_asyncio.fixture(scope="function")
-async def get_b_tools(get_temp_keyring, blockchain_constants: ConsensusConstants):
-    local_b_tools = await create_block_tools_async(constants=blockchain_constants, keychain=get_temp_keyring)
+async def get_b_tools(get_temp_keyring):
+    local_b_tools = await create_block_tools_async(constants=test_constants_modified, keychain=get_temp_keyring)
     new_config = local_b_tools._config
     local_b_tools.change_config(new_config)
     return local_b_tools

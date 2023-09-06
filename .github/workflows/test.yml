@@ -5,9 +5,7 @@ on:
     paths-ignore:
     - '**.md'
     branches:
-    - long_lived/**
-    - main
-    - release/**
+    - '**'
     tags:
     - '**'
   pull_request:
@@ -100,11 +98,11 @@ jobs:
             name: Ubuntu
             runs-on: ubuntu-latest
         python:
-          - name: '3.9'
-            action: '3.9'
-            apt: '3.9'
-            install_sh: '3.9'
-            matrix: '3.9'
+          - name: '3.10'
+            action: '3.10'
+            apt: '3.10'
+            install_sh: '3.10'
+            matrix: '3.10'
 
     steps:
       - uses: actions/checkout@v3

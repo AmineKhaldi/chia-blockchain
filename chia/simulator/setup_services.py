@@ -114,14 +114,18 @@ async def setup_full_node(
     *,
     reuse_db: bool = False,
 ) -> AsyncGenerator[Service[FullNode, FullNodeAPI], None]:
-    db_path = local_bt.root_path / f"{db_name}"
-    if not reuse_db and db_path.exists():
+    if reuse_db:
+        db_path = local_bt.root_path / f"{db_name}"
+        uri = False
+    else:
+        db_path = f"file:db_{db_name}?mode=memory&cache=shared"
+        uri = True
+    if not reuse_db:
         # TODO: remove (maybe) when fixed https://github.com/python/cpython/issues/97641
         gc.collect()
-        db_path.unlink()
 
         if db_version > 1:
-            with sqlite3.connect(db_path) as connection:
+            with sqlite3.connect(db_path, uri=uri) as connection:
                 connection.execute("CREATE TABLE database_version(version int)")
                 connection.execute("INSERT INTO database_version VALUES (?)", (db_version,))
                 connection.commit()
@@ -172,7 +176,7 @@ async def setup_full_node(
 
     service.stop()
     await service.wait_closed()
-    if not reuse_db and db_path.exists():
+    if not reuse_db:
         # TODO: remove (maybe) when fixed https://github.com/python/cpython/issues/97641
 
         # 3.11 switched to using functools.lru_cache for the statement cache.
@@ -181,17 +185,6 @@ async def setup_full_node(
         # deallocated, not until, for example, gc.collect() is called to break
         # the cycle.
         gc.collect()
-        for _ in range(10):
-            try:
-                db_path.unlink()
-                break
-            except PermissionError as e:
-                print(f"db_path.unlink(): {e}")
-                time.sleep(0.1)
-                # filesystem operations are async on windows
-                # [WinError 32] The process cannot access the file because it is
-                # being used by another process
-                pass
 
 
 async def setup_crawler(

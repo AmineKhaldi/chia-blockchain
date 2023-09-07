@@ -1421,6 +1421,8 @@ class FullNode:
         )
 
         if fns_peak_result.new_signage_points is not None and peer is not None:
+            if len(fns_peak_result.new_signage_points) > 0:
+                breakpoint()
             for index, sp in fns_peak_result.new_signage_points:
                 assert (
                     sp.cc_vdf is not None

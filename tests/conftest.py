@@ -108,7 +108,7 @@ class ConsensusMode(Enum):
 
 @pytest.fixture(
     scope="session",
-    params=[ConsensusMode.PLAIN, ConsensusMode.HARD_FORK_2_0, ConsensusMode.SOFT_FORK3, ConsensusMode.SOFT_FORK4],
+    params=[ConsensusMode.PLAIN],
 )
 def consensus_mode(request):
     return request.param

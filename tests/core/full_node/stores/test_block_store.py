@@ -151,7 +151,9 @@ async def test_deadlock(tmp_dir: Path, db_version: int, bt: BlockTools, use_cach
     """
     blocks = bt.get_consecutive_blocks(10)
 
-    async with DBConnection(db_version) as wrapper, DBConnection(db_version) as wrapper_2:
+    async with DBConnection(db_version, in_memory_db=False) as wrapper, DBConnection(
+        db_version, in_memory_db=False
+    ) as wrapper_2:
         store = await BlockStore.create(wrapper, use_cache=use_cache)
         coin_store_2 = await CoinStore.create(wrapper_2)
         store_2 = await BlockStore.create(wrapper_2)

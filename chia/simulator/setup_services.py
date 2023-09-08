@@ -9,7 +9,7 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 from secrets import token_bytes
-from typing import Any, AsyncGenerator, Dict, Iterator, List, Optional, Tuple
+from typing import Any, AsyncGenerator, Dict, Iterator, List, Optional, Tuple, Union
 
 from chia.cmds.init_funcs import init
 from chia.consensus.constants import ConsensusConstants
@@ -115,20 +115,17 @@ async def setup_full_node(
     reuse_db: bool = False,
 ) -> AsyncGenerator[Service[FullNode, FullNodeAPI], None]:
     if reuse_db:
-        db_path = local_bt.root_path / f"{db_name}"
+        db_path: Union[str, Path] = local_bt.root_path / f"{db_name}"
         uri = False
     else:
         db_path = f"file:db_{db_name}?mode=memory&cache=shared"
         uri = True
-    if not reuse_db:
-        # TODO: remove (maybe) when fixed https://github.com/python/cpython/issues/97641
-        gc.collect()
 
-        if db_version > 1:
-            with sqlite3.connect(db_path, uri=uri) as connection:
-                connection.execute("CREATE TABLE database_version(version int)")
-                connection.execute("INSERT INTO database_version VALUES (?)", (db_version,))
-                connection.commit()
+    if not reuse_db and db_version > 1:
+        with sqlite3.connect(db_path, uri=uri) as connection:
+            connection.execute("CREATE TABLE database_version(version int)")
+            connection.execute("INSERT INTO database_version VALUES (?)", (db_version,))
+            connection.commit()
 
     if connect_to_daemon:
         assert local_bt.config["daemon_port"] is not None
@@ -176,15 +173,6 @@ async def setup_full_node(
 
     service.stop()
     await service.wait_closed()
-    if not reuse_db:
-        # TODO: remove (maybe) when fixed https://github.com/python/cpython/issues/97641
-
-        # 3.11 switched to using functools.lru_cache for the statement cache.
-        # See #87028. This introduces a reference cycle involving the connection
-        # object, so the connection object no longer gets immediately
-        # deallocated, not until, for example, gc.collect() is called to break
-        # the cycle.
-        gc.collect()
 
 
 async def setup_crawler(

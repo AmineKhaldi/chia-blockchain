@@ -20,8 +20,8 @@ from tests.util.blockchain import create_blockchain
 class TestNewPeak:
     @pytest.mark.asyncio
     async def test_timelord_new_peak_basic(self, bt, timelord, default_1000_blocks) -> None:
-        b1, db_wrapper1, db_path1 = await create_blockchain(bt.constants, 2)
-        b2, db_wrapper2, db_path2 = await create_blockchain(bt.constants, 2)
+        b1, db_wrapper1 = await create_blockchain(bt.constants, 2)
+        b2, db_wrapper2 = await create_blockchain(bt.constants, 2)
 
         timelord_api, timelord_server = timelord
         for block in default_1000_blocks:
@@ -58,15 +58,13 @@ class TestNewPeak:
         await db_wrapper2.close()
         b1.shut_down()
         b2.shut_down()
-        db_path1.unlink()
-        db_path2.unlink()
 
         return None
 
     @pytest.mark.asyncio
     async def test_timelord_new_peak_heavier_unfinished(self, bt, timelord, default_1000_blocks) -> None:
-        b1, db_wrapper1, db_path1 = await create_blockchain(bt.constants, 2)
-        b2, db_wrapper2, db_path2 = await create_blockchain(bt.constants, 2)
+        b1, db_wrapper1 = await create_blockchain(bt.constants, 2)
+        b2, db_wrapper2 = await create_blockchain(bt.constants, 2)
 
         timelord_api, timelord_server = timelord
         for block in default_1000_blocks:
@@ -141,8 +139,6 @@ class TestNewPeak:
         await db_wrapper2.close()
         b1.shut_down()
         b2.shut_down()
-        db_path1.unlink()
-        db_path2.unlink()
 
         return None
 

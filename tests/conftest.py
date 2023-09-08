@@ -159,12 +159,11 @@ async def empty_blockchain(latest_db_version, blockchain_constants):
     """
     from tests.util.blockchain import create_blockchain
 
-    bc1, db_wrapper, db_path = await create_blockchain(blockchain_constants, latest_db_version)
+    bc1, db_wrapper = await create_blockchain(blockchain_constants, latest_db_version)
     yield bc1
 
     await db_wrapper.close()
     bc1.shut_down()
-    db_path.unlink()
 
 
 @pytest.fixture(scope="function")

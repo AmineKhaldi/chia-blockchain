@@ -5,9 +5,7 @@ on:
     paths-ignore:
     - '**.md'
     branches:
-    - long_lived/**
-    - main
-    - release/**
+    - '**'
     tags:
     - '**'
   pull_request:
@@ -33,7 +31,7 @@ jobs:
       - name: Setup Python environment
         uses: Chia-Network/actions/setup-python@main
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Generate matrix configuration
         id: configure
@@ -100,11 +98,11 @@ jobs:
             name: Ubuntu
             runs-on: ubuntu-latest
         python:
-          - name: '3.10'
-            action: '3.10'
-            apt: '3.10'
-            install_sh: '3.10'
-            matrix: '3.10'
+          - name: '3.11'
+            action: '3.11'
+            apt: '3.11'
+            install_sh: '3.11'
+            matrix: '3.11'
 
     steps:
       - uses: actions/checkout@v4

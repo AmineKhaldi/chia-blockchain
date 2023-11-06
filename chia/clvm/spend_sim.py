@@ -190,8 +190,8 @@ class SpendSim:
             await c.close()
         await self.db_wrapper.close()
 
-    async def new_peak(self) -> None:
-        await self.mempool_manager.new_peak(self.block_records[-1], None)
+    async def new_peak(self, npc_result: Optional[NPCResult]) -> None:
+        await self.mempool_manager.new_peak(self.block_records[-1], npc_result)
 
     def new_coin_record(self, coin: Coin, coinbase: bool = False) -> CoinRecord:
         return CoinRecord(
@@ -282,7 +282,17 @@ class SpendSim:
         self.block_height = next_block_height
 
         # mempool is reset
-        await self.new_peak()
+        if generator is None:
+            npc_result = None
+        else:
+            npc_result = get_name_puzzle_conditions(
+                generator=generator,
+                max_cost=DEFAULT_CONSTANTS.MAX_BLOCK_COST_CLVM,
+                mempool_mode=False,
+                height=next_block_height,
+                constants=DEFAULT_CONSTANTS,
+            )
+        await self.new_peak(npc_result)
 
         # return some debugging data
         return return_additions, return_removals

@@ -2207,6 +2207,8 @@ class FullNode:
         # Ignore if syncing or if we have not yet received a block
         # the mempool must have a peak to validate transactions
         if self.sync_store.get_sync_mode() or self.mempool_manager.peak is None:
+            print("self.sync_store.get_sync_mode(): ", self.sync_store.get_sync_mode())
+            print("self.mempool_manager.peak: ", self.mempool_manager.peak)
             status = MempoolInclusionStatus.FAILED
             error: Optional[Err] = Err.NO_TRANSACTIONS_WHILE_SYNCING
             self.mempool_manager.remove_seen(spend_name)

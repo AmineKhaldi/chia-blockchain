@@ -11,9 +11,7 @@ on:
    paths-ignore:
        - '**.md'
    branches:
-     - 'long_lived/**'
-     - main
-     - 'release/**'
+     - '**'
  release:
    types: [published]
  pull_request:

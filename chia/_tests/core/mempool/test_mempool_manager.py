@@ -12,7 +12,6 @@ from chiabip158 import PyBIP158
 from chia._tests.conftest import ConsensusMode
 from chia._tests.util.misc import invariant_check_mempool
 from chia._tests.util.setup_nodes import OldSimulatorsAndWallets, setup_simulators_and_wallets
-from chia.consensus.condition_costs import ConditionCost
 from chia.consensus.constants import ConsensusConstants
 from chia.consensus.default_constants import DEFAULT_CONSTANTS
 from chia.full_node.mempool import MAX_SKIPPED_ITEMS, PRIORITY_TX_THRESHOLD
@@ -1077,22 +1076,30 @@ async def test_create_bundle_from_mempool_on_max_cost(num_skipped_items: int, ca
     # 2. After skipping MAX_SKIPPED_ITEMS, we stop processing further items.
 
     async def make_and_send_big_cost_sb(coin: Coin) -> None:
+        """
+        Creates a spend bundle with a big enough cost that gets it close to the
+        maximum block clvm cost limit. The generated spend bundle has
+        `target_cost` and the expected maximum block clvm cost is
+        `max_block_clvm_cost` minus block overhead.
+        """
+        target_cost = 548_868_044
         conditions = []
         sk = AugSchemeMPL.key_gen(b"7" * 32)
         g1 = sk.get_g1()
         sig = AugSchemeMPL.sign(sk, IDENTITY_PUZZLE_HASH, g1)
         aggsig = G2Element()
-        cost_target = 401_000_000
-        conditions.append([ConditionOpcode.CREATE_COIN, IDENTITY_PUZZLE_HASH, coin.amount - 10_000_000])
-        cost_target -= ConditionCost.CREATE_COIN.value - 143 * TEST_COST_PER_BYTE
-        while cost_target > ConditionCost.AGG_SIG.value + 38 * TEST_COST_PER_BYTE:
+        # We're using this many agg sig conditions to increase the spend bundle
+        # cost and reach our target cost.
+        for _ in range(242):
             conditions.append([ConditionOpcode.AGG_SIG_UNSAFE, g1, IDENTITY_PUZZLE_HASH])
             aggsig += sig
-            cost_target -= ConditionCost.AGG_SIG.value + 38 * TEST_COST_PER_BYTE
-
+        conditions.append([ConditionOpcode.CREATE_COIN, IDENTITY_PUZZLE_HASH, coin.amount - 10_000_000])
         # Create a spend bundle with a big enough cost that gets it close to the limit
-        _, _, res = await generate_and_add_spendbundle(mempool_manager, conditions, coin, aggsig)
+        sb, _, res = await generate_and_add_spendbundle(mempool_manager, conditions, coin, aggsig)
         assert res[1] == MempoolInclusionStatus.SUCCESS
+        mi = mempool_manager.get_mempool_item(sb.name())
+        assert mi is not None
+        assert mi.cost == target_cost
 
     mempool_manager, coins = await setup_mempool_with_coins(
         coin_amounts=list(range(1_000_000_000, 1_000_000_030)),

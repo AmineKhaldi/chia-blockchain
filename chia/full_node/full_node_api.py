@@ -1072,7 +1072,34 @@ class FullNodeAPI:
                 request.signage_point_index,
                 required_iters,
             )
-
+            overflow = sp_iters > ip_iters
+            # Candidate position at infusion time in total iterations
+            candidate_infusion_point_total_iters = uint128(
+                total_iters_pos_slot + ip_iters + (sub_slot_iters if overflow else 0)
+            )
+            # If this candidate would be infused before the current finished
+            # head then it's already too late and it should be dropped. This
+            # indicates latency issues.
+            if peak is not None:
+                if candidate_infusion_point_total_iters < peak.total_iters:
+                    self.log.warning(
+                        "Dropping farmed unfinished block candidate as it's "
+                        "behind the current head (latency issues). "
+                        f"Signage point index: {request.signage_point_index} "
+                        f"unfinished block infusion point total iters: {candidate_infusion_point_total_iters} "
+                        f"current head total iters: {peak.total_iters} "
+                        f"peak height: {peak.height}"
+                    )
+                    return None
+            # Candidate signage point position in total iterations
+            candidate_sp_total_iters = uint128(total_iters_pos_slot + sp_iters)
+            # If this candidate would be infused at or after the current
+            # finished head, and its signage point's position is at or before
+            # the end of the window where the last transaction block prevents a
+            # new transaction block from being created, then we should create
+            # an empty block.
+            if tx_peak is not None and candidate_sp_total_iters <= tx_peak.total_iters:
+                new_block_gen = None
             # The block's timestamp must be greater than the previous transaction block's timestamp
             timestamp = uint64(time.time())
             curr: BlockRecord | None = prev_b

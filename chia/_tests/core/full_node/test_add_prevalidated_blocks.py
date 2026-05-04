@@ -1,7 +1,7 @@
 """
 Regression tests for FullNode.add_prevalidated_blocks().
 
-SEC-349: Prevalidation failures must return typed errors instead of raising
+Prevalidation failures must return typed errors instead of raising
 AssertionError, so the caller can ban the offending peer.
 """
 
